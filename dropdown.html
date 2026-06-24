@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .faq-dropdown {
+            font-family: Arial, sans-serif;
+        }
+
+        .dropdown-btn {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            padding: 10px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h3 {
+            margin-top: 0;
+        }
+
+        .question p {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-dropdown">
+        <button class="dropdown-btn">FAQs</button>
+        <div class="dropdown-content">
+            <div class="question">
+                <h3>What is paper trading?</h3>
+                <p>Paper trading is a simulated trading process where investors practice buying and selling assets without risking real money.</p>
+            </div>
+            <div class="question">
+                <h3>Why should I paper trade?</h3>
+                <p>Paper trading allows investors to gain experience and test trading strategies in a risk-free environment before committing real capital.</p>
+            </div>
+            <!-- Add more questions and answers here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var dropdownBtn = document.querySelector('.dropdown-btn');
+            var dropdownContent = document.querySelector('.dropdown-content');
+
+            // Toggle the dropdown content when the button is clicked
+            dropdownBtn.addEventListener('click', function() {
+                dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    </script>
+</body>
+</html>

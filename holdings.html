@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            Explore
+        </title>
+        <script src="holdings.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="holdings.css">
+        <link rel="icon" href="TradeTact.png" type="image/x-icon">
+    </head>
+    <body>
+        <header>
+            <ul id="navbar">
+                <li><img src="logo1.png" alt="Fauxfinance" id="logo"></li>
+                <li id="explore"><button id="explorebutton" onclick="explore()">Explore</button></li>
+                <li id="Investments"><button id="investbutton" onclick="invest()">Investments</button></li>
+                <li><input type="text" id="searchbar1" placeholder="        What are you searching for?"></li>
+                <li><img src="bell1.png" id="bell"></li>
+                <li><img src ="wallet.png" id="wallet"></li>
+                <li><img src = "user icon.png" id="usericon"></li>
+            </ul>
+        </header>
+        <hr id="breakline">
+        <div id="body1">
+            <div id="myinvest">
+                <pre id="yourinvest">Your Investments</pre>
+                <button id="investvsreturn" onclick="invest()">
+                    <p id="invest">
+                        <span id="returns">-$23.85(1.49%)</span> <!-- Assuming this is the amount of returns -->
+                        <span id="invested">$1757.35</span>
+                    </p>
+                    <br>
+                    <p id="heading">
+                        <span id="totalreturns">Total returns</span>
+                        <span id="currentvalue">Current Value</span> <!-- Corrected spelling of "Current Value" -->
+                    </p>
+                </button>
+                <pre id="watchlist">ALL Watchlist</pre>
+                <div id="1">
+                    <ul id="watchitems">
+                        <li>
+                            <div class="watchbutton">
+                                <span class="arrow">⋀</span>
+                                <p class="watchheading"><span class="listheading">Your Watchlist</span><br>
+                                    <span class="items">2 items</span> 
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            <div id="watch1"><!-- first element of watch list-->
+                                <div id="left1">
+                                    <p id="price1">$183</p><!--present price of stock-->
+                                    <p id="change1">-1.27(0.69%)</p><!--change of stock from what price we have bought-->
+                                </div>
+                                <span id="apple">APPLE</span><!--title of first watchlist-->
+                            </div>
+                        </li>
+                        <li>
+                            <div id="watch2"><!--second element of watch list-->
+                                <span id="tesla">TESLA</span><!--title of second element of watch list-->
+                                <div id="left2">
+                                    <p id="price2">$168.47</p><!--present price of stock-->
+                                    <p id="change2">-3.50(2.04%)</p><!--change of stock from what price we have bought-->
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <br><br>
+            <div id="explorebody">   <!--body of the explore page-->
+                <h4 id="index" style="color: #44475b;">Index</h4>
+                <ul id="indexbar">
+                    <li id="nifty50"><button id="niftybutton"><pre>NIFTY 50<!--nifty50 stock price and change in past 1 day-->
+22,000  <span id="niftychange">401.92(2.12%)</span></pre></button></li>
+                    <li id="sensex"><button id="sensexbutton"><pre>SENSEX<!--sensex stock price and change in past 1 day-->
+72,664  <span id="sensexchange">260.30(0.36%)</span></pre></button></li>
+                    <li id="bnifty"><button id="bniftybutton"><pre>BANKNIFTY<!--banknifty stock price and change in past 1 day-->
+47,421  <span id="bniftychange">-66.80(0.14%)</span></pre></button></li>
+                </ul>
+            </div>
+        </div>
+        <br>
+        <div id="body2">
+            <button class="stock" onclick="apple()">    <!--Apple stock-->
+                <div class="price"> 
+                    <p class="sprice">$183</p>
+                    <p class="schange">-1.27(0.69%)</p>
+                </div>
+                <p class="title">APPLE</p>
+            </button>
+            <br>
+            <button class="stock" onclick="tesla()"><!--tesla stock-->
+                <div class="price">
+                    <p class="sprice">$168.47</p>
+                    <p class="schange">-3.50(2.04%)</p>
+                </div>
+                <p class="title">TESLA</p>
+            </button>
+            <br>
+            <button class="stock" onclick="uber()"><!--uber stock-->
+                <div class="price">
+                    <p class="sprice">$65.57</p>
+                    <p class="schange">-0.38(0.58%)</p>
+                </div>
+                <p class="title">UBER TECHNOLOGIES INC</p>
+            </button>
+            <br>
+            <button class="stock" onclick="amazon()"><!--amazon stock-->
+                <div class="price">
+                    <p class="sprice">$184.70</p>
+                    <p class="schange" style="color: green;">+1.07(0.58%)</p>
+                </div>
+                <p class="title">AMAZON.COM INC</p>
+            </button>
+            <br>
+            <button class="stock" onclick="google()"><!--google stock-->
+                <div class="price">
+                    <p class="sprice">$177.29</p>
+                    <p class="schange" style="color: green;">+1.86(1.06%)</p>
+                </div>
+                <p class="title">ALPHABET INC CLASS C</p>
+            </button>
+            <br>
+            <button class="stock" onclick="microsoft()"><!--microsoft stock-->
+                <div class="price">
+                    <p class="sprice">$420.21</p>
+                    <p class="schange">-0.78(0.19%)</p>
+                </div>
+                <p class="title">MICROSOFT CORP</p>
+            </button>
+            <br>
+            <button class="stock" onclick="nvidia()"><!--nvidia sttock-->
+                <div class="price">
+                    <p class="sprice">$924.79</p>
+                    <p class="schange">-18.80(1.99%)</p>
+                </div>
+                <p class="title">NVIDIA CORP</p>
+            </button>
+        </div>
+        <footer>
+            <!-- Follow us section with social media icons -->
+            <div class="content-box">
+                <div class="content-head">
+                    <h1>Follow us on</h1>
+                </div>
+                <div class="content-body"></div>
+                <div class="icons">
+                    <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
+                    <span><i class="fa fa-twitter" aria-hidden="true"></i></span>
+                    <span><i class="fa fa-instagram" aria-hidden="true"></i></span>
+                    <span><i class="fa fa-youtube" aria-hidden="true"></i></span>
+                </div>
+            </div>
+            
+            <!-- Address section -->
+            <div class="content-box">
+                <div class="content-head">
+                    <h1>Address</h1>
+                </div>
+                <div class="content-body">
+                    <p><i class="fa fa-map-marker" aria-hidden="true"></i>
+                        <span>Aseb</span> </p>
+                    <p><i class="fa fa-phone" aria-hidden="true"></i>
+                        <span>+911XXXXXXXX</span> </p>
+                    <p><i class="fa fa-envelope" aria-hidden="true"></i>
+                        <span> abc@gmail.com</span> </p>
+                </div>
+            </div>
+            
+            <!-- Contact Us section with a form -->
+            <div class="content-box">
+                <div class="content-head">
+                    <h1>Contact Us</h1>
+                </div>
+                <div class="content-body">
+                    <form action="">
+                        <input type="text" placeholder="Enter Name"> <br>
+                        <input type="email" placeholder="xyz@gmail.com"> <br>
+                        <textarea name="" id="" cols="20" rows="3" placeholder="Enter Message"></textarea><br>
+                        <button type="Submit" style="color: black;">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

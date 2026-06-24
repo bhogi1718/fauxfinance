@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="login-form.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <ul id="navbar">
+            <li><img src="logo1.png" alt="Fauxfinance" id="logo"></li>
+            <li id="explore"><button id="explorebutton">Explore</button></li>
+            <li id="Investments"><button id="investbutton">Investments</button></li>
+            <li><input type="text" id="searchbar1" placeholder="        What are you searching for?"></li>
+            <li><img src="bell1.png" id="bell"></li>
+            <li><img src ="wallet.png" id="wallet"></li>
+            <li><img src = "user icon.png" id="usericon"></li>
+        </ul>
+        </header>
+    <form>
+        <fieldset>
+            <legend>Register:</legend>
+            <label for="fname">First name:</label>
+            <input type="text" id="fname"><br><br>
+            <label for="lname">Last name:</label>
+            <input type="text" id="lname"><br><br>
+            <label for="email">Email-Address:</label>
+            <input type="email" id="email"><br><br>
+            <label for="birthday">Birth-Date:</label>
+            <input type="date" id="birthday"><br><br>
+            <label for="PAN">PAN-NUMBER:</label>
+            <input type="text" id="PAN"><br><br>
+            <label for="occupation">How would you describe yourself in trades?</label><br><br>
+            <button class="busy"><img src="begineer.jpg" class="image" alt="Beginner"></button>
+            <button class="student"><img src="intermediate.jpg" class="image" alt="Intermediate"></button>
+            <button class="service"><img src="advanced.jpg" class="image" alt="Advanced"></button><br><br>
+            <button id="submit" type="submit">Submit</button>
+        </fieldset>
+    </form>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <p>Learn more about our mission and team.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Services</h3>
+                <p>Explore our range of stock market services.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Market Insights</h3>
+                <p>Stay updated with the latest trends and analysis.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <p>Get in touch with our experts.</p>
+            </div>
+        </div>
+        
+        <div class="footer-social">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+        
+        <div class="footer-newsletter">
+            <h3>Subscribe to Our Newsletter</h3>
+            <form action="#" method="post">
+                <input type="email" name="email" placeholder="Enter your email">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+        
+        <div class="footer-info">
+            <div class="footer-logo">
+                <img src="TradeTact.png" height="100px" width="100px" alt="Company Logo">
+            </div>
+            <div class="footer-contact">
+                <p>Address: Amrita Vishwa Vidyapeetham, Bengaluru</p>
+                <p>Phone: +91 9108208167</p>
+                <p>Email: fauxfinance@gmail.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <p>&copy; <span id="current-year"></span> FauxFinance. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

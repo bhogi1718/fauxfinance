@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs</title>
+    <style>
+        .answer {
+            display: none; /* Hide answer by default */
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li>
+            <button onclick="toggleAnswer('answer1')">What is Paper Trading?<span id="faq11">⋁</span></button>
+            <div id="answer1" class="answer">Paper trading is a simulated trading practice where investors can practice buying and selling assets without risking real money.</div>
+        </li>
+        <!-- Add more FAQs and answers here -->
+    </ul>
+
+    <script>
+        // Function to toggle answer visibility
+        function toggleAnswer(answerId) {
+            var answer = document.getElementById(answerId);
+            answer.classList.toggle("show");
+        }
+    </script>
+</body>
+</html>
