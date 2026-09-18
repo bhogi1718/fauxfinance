@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { useNow } from "@/hooks/use-now";
 import { formatRelativeTime } from "@/lib/format";
 
 // Finnhub's free quote keeps reporting the last trade when the market is closed.
@@ -8,8 +9,9 @@ import { formatRelativeTime } from "@/lib/format";
 const STALE_AFTER_MS = 20 * 60 * 1000;
 
 export function MarketStatus({ lastTradeAt }: { lastTradeAt: number | null | undefined }) {
-  if (!lastTradeAt) return null;
-  const stale = Date.now() - lastTradeAt > STALE_AFTER_MS;
+  const now = useNow();
+  if (!lastTradeAt || now === null) return null;
+  const stale = now - lastTradeAt > STALE_AFTER_MS;
 
   return (
     <Badge variant={stale ? "secondary" : "outline"} className="gap-1.5 font-normal">
