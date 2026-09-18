@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fauxfinance
+      POSTGRES_PASSWORD: fauxfinance_dev
+      POSTGRES_DB: fauxfinance
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - fauxfinance_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fauxfinance -d fauxfinance"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  fauxfinance_pg_data:
