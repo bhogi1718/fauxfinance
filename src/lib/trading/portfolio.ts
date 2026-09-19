@@ -75,9 +75,12 @@ export async function getPortfolio(userId: string): Promise<PortfolioView> {
     };
   });
 
-  const valued = views
-    .filter((v) => v.currentPriceCents !== null)
-    .map((v) => ({ quantity: v.quantity, currentPriceCents: v.currentPriceCents as number }));
+  // Holdings without a live quote are valued at cost so totals degrade to "no change"
+  // rather than silently dropping to zero; `quotesStale` tells the UI to say so.
+  const valued = views.map((v) => ({
+    quantity: v.quantity,
+    currentPriceCents: v.currentPriceCents ?? v.avgCostCents,
+  }));
 
   const holdingsValueCents = computeHoldingsValueCents(valued);
   const totalValueCents = computeTotalPortfolioValueCents(wallet.balanceCents, valued);
@@ -159,13 +162,13 @@ export async function getLeaderboard(limit = 25): Promise<LeaderboardEntry[]> {
     .innerJoin(wallets, eq(wallets.userId, user.id));
 
   const allHoldings = await db
-    .select({ userId: holdings.userId, symbol: holdings.symbol, quantity: holdings.quantity })
+    .select({ userId: holdings.userId, symbol: holdings.symbol, quantity: holdings.quantity, avgCostCents: holdings.avgCostCents })
     .from(holdings);
 
   const byUser = new Map<string, { valueCents: number; count: number }>();
   for (const h of allHoldings) {
     if (!isSupportedSymbol(h.symbol)) continue;
-    const price = quotes[h.symbol]?.priceCents ?? 0;
+    const price = quotes[h.symbol]?.priceCents ?? h.avgCostCents;
     const entry = byUser.get(h.userId) ?? { valueCents: 0, count: 0 };
     entry.valueCents += h.quantity * price;
     entry.count += 1;

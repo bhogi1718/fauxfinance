@@ -25,6 +25,12 @@ export function PortfolioSummary({ initialData }: { initialData?: PortfolioView 
   }
 
   return (
+    <div className="space-y-3">
+    {data.quotesStale && (
+      <p role="status" className="rounded-lg border border-border/60 bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+        Live prices are unavailable right now — positions are shown at cost until quotes come back.
+      </p>
+    )}
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       <Tile
         label="Total value"
@@ -51,6 +57,7 @@ export function PortfolioSummary({ initialData }: { initialData?: PortfolioView 
           </>
         }
       />
+    </div>
     </div>
   );
 }
