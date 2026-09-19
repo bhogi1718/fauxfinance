@@ -16,7 +16,7 @@ export const auth = betterAuth({
     minPasswordLength: 8,
   },
   rateLimit: {
-    enabled: true,
+    enabled: env.NODE_ENV === "production",
     window: 60,
     max: 30,
     customRules: {

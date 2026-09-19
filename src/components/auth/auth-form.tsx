@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
 import type { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -43,14 +42,16 @@ export function AuthForm({ mode }: { mode: Mode }) {
         router.push(redirectTo);
         router.refresh();
       },
-      onError: ({ error }: { error: { code?: string; message?: string } }) => {
+      onError: ({ error }: { error: { code?: string; message?: string; status?: number } }) => {
         setSubmitting(false);
-        if (mode === "login") {
+        if (error.status === 429) {
+          setErrors({ _: "Too many attempts. Please wait a minute and try again." });
+        } else if (mode === "login") {
           setErrors({ _: "Incorrect email or password." });
         } else if (error.code === "USER_ALREADY_EXISTS") {
           setErrors({ email: "An account with this email already exists." });
         } else {
-          toast.error(error.message ?? "Something went wrong.");
+          setErrors({ _: error.message ?? "Something went wrong. Please try again." });
         }
       },
     };
