@@ -5,6 +5,7 @@ import { holdings, transactions, user, wallets, watchlistItems } from "@/lib/db/
 import { getQuotes, type Quote } from "@/lib/market/quotes";
 import { STARTING_CASH_CENTS, SUPPORTED_SYMBOLS, type StockSymbol, isSupportedSymbol } from "./constants";
 import { ensureWallet } from "./engine";
+import { maybeRecordSnapshot } from "./snapshots";
 import {
   computeHoldingsValueCents,
   computeReturnPercent,
@@ -86,6 +87,10 @@ export async function getPortfolio(userId: string): Promise<PortfolioView> {
   const totalValueCents = computeTotalPortfolioValueCents(wallet.balanceCents, valued);
   const investedCents = views.reduce((s, v) => s + v.investedCents, 0);
   const realizedPnlCents = Number(pnl?.realized ?? 0);
+
+  if (!quotesStale) {
+    await maybeRecordSnapshot(userId, totalValueCents, wallet.balanceCents);
+  }
 
   return {
     cashCents: wallet.balanceCents,

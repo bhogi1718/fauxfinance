@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { WatchlistList } from "@/components/watchlist/watchlist-list";
-import { getSessionUser } from "@/lib/auth/session";
+import { requireUser } from "@/lib/auth/session";
 import { getWatchlist } from "@/lib/trading/portfolio";
 
 export const metadata: Metadata = { title: "Watchlist" };
 export const dynamic = "force-dynamic";
 
 export default async function WatchlistPage() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/watchlist");
   const items = await getWatchlist(user.id);
 
   return (

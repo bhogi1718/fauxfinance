@@ -9,7 +9,7 @@ const devUrl = process.env.DATABASE_URL ?? "postgresql://fauxfinance:fauxfinance
 const testUrl = process.env.TEST_DATABASE_URL ?? devUrl.replace(/\/[^/?]+(\?|$)/, "/fauxfinance_test$1");
 
 const sharedEnv = {
-  NODE_ENV: "test",
+  NODE_ENV: "test" as const,
   DATABASE_URL: testUrl,
   BETTER_AUTH_SECRET: "test-secret-test-secret-test-secret-1234",
   BETTER_AUTH_URL: "http://localhost:3000",

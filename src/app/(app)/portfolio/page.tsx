@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { HoldingsTable } from "@/components/portfolio/holdings-table";
 import { PortfolioSummary } from "@/components/portfolio/portfolio-summary";
-import { getSessionUser } from "@/lib/auth/session";
+import { requireUser } from "@/lib/auth/session";
 import { getPortfolio } from "@/lib/trading/portfolio";
 
 export const metadata: Metadata = { title: "Portfolio" };
 export const dynamic = "force-dynamic";
 
 export default async function PortfolioPage() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/portfolio");
   const portfolio = await getPortfolio(user.id);
 
   return (

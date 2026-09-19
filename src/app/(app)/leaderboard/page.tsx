@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { LeaderboardTable } from "@/components/leaderboard/leaderboard-table";
-import { getSessionUser } from "@/lib/auth/session";
+import { requireUser } from "@/lib/auth/session";
 import { getLeaderboard } from "@/lib/trading/portfolio";
 
 export const metadata: Metadata = { title: "Leaderboard" };
 export const dynamic = "force-dynamic";
 
 export default async function LeaderboardPage() {
-  const [user, entries] = await Promise.all([getSessionUser(), getLeaderboard()]);
+  const [user, entries] = await Promise.all([requireUser("/leaderboard"), getLeaderboard()]);
 
   return (
     <div className="space-y-6">

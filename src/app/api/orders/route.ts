@@ -2,7 +2,8 @@ import { fail, handleError, ok, unauthorized, validationFailed } from "@/lib/api
 import { checkRateLimit, clientKey, crossOrigin, isSameOrigin, rateLimited } from "@/lib/api/rate-limit";
 import { getSessionUser } from "@/lib/auth/session";
 import { placeOrder } from "@/lib/trading/engine";
-import { getTransactionHistory } from "@/lib/trading/portfolio";
+import { getPortfolio, getTransactionHistory } from "@/lib/trading/portfolio";
+import { recordSnapshot } from "@/lib/trading/snapshots";
 import { orderHistoryQuerySchema, placeOrderSchema } from "@/lib/validation/orders";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +31,10 @@ export async function POST(req: Request) {
 
   try {
     const result = await placeOrder({ userId: user.id, ...parsed.data });
+    // Best effort: a failed snapshot must never fail a filled order.
+    getPortfolio(user.id)
+      .then((p) => (p.quotesStale ? undefined : recordSnapshot(user.id, p.totalValueCents, p.cashCents)))
+      .catch((err) => console.warn("[orders] snapshot failed", err));
     return ok(result, { status: 201 });
   } catch (error) {
     return handleError(error, "orders:post");

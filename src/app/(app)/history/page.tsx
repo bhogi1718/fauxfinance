@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { HistoryTable } from "@/components/portfolio/history-table";
-import { getSessionUser } from "@/lib/auth/session";
+import { requireUser } from "@/lib/auth/session";
 import { getTransactionHistory } from "@/lib/trading/portfolio";
 
 export const metadata: Metadata = { title: "History" };
 export const dynamic = "force-dynamic";
 
 export default async function HistoryPage() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/history");
   const history = await getTransactionHistory(user.id, 100);
 
   return (

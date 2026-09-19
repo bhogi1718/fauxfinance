@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { HoldingsTable } from "@/components/portfolio/holdings-table";
+import { PerformanceChart } from "@/components/portfolio/performance-chart";
 import { PortfolioSummary } from "@/components/portfolio/portfolio-summary";
 import { StockList } from "@/components/stocks/stock-list";
 import { Button } from "@/components/ui/button";
-import { getSessionUser } from "@/lib/auth/session";
+import { requireUser } from "@/lib/auth/session";
 import { getPortfolio } from "@/lib/trading/portfolio";
 
 export const metadata: Metadata = { title: "Dashboard" };
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const user = (await getSessionUser())!;
+  const user = await requireUser("/dashboard");
   const portfolio = await getPortfolio(user.id);
   const firstName = user.name.split(" ")[0];
 
@@ -24,6 +25,8 @@ export default async function DashboardPage() {
       </div>
 
       <PortfolioSummary initialData={portfolio} />
+
+      <PerformanceChart />
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <HoldingsTable initialData={portfolio} compact />
