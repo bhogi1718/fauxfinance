@@ -46,6 +46,7 @@ export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
   const holding = portfolio?.holdings.find((h) => h.symbol === symbol);
   const owned = holding?.quantity ?? 0;
   const cash = portfolio?.cashCents ?? 0;
+  const portfolioReady = portfolio !== undefined;
 
   const quantity = useMemo(() => {
     const n = Number(qtyInput);
@@ -58,6 +59,7 @@ export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
 
   const validation = (() => {
     if (!quote) return "Waiting for a live price…";
+    if (!portfolioReady) return "Loading your account…";
     if (quantity === 0) return "Enter a whole number of shares.";
     if (side === "BUY" && totalCents > cash) return `You can afford up to ${formatShares(maxBuy)}.`;
     if (side === "SELL" && quantity > owned) return owned === 0 ? `You don't own ${symbol}.` : `You only own ${formatShares(owned)}.`;
@@ -124,7 +126,13 @@ export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
               aria-describedby="quantity-hint"
             />
             <p id="quantity-hint" className="text-xs text-muted-foreground">
-              {side === "BUY" ? `Buying power ${formatCents(cash)}` : `You own ${formatShares(owned)}`}
+              {!portfolioReady ? (
+                <Skeleton className="inline-block h-3 w-32 align-middle" />
+              ) : side === "BUY" ? (
+                `Buying power ${formatCents(cash)}`
+              ) : (
+                `You own ${formatShares(owned)}`
+              )}
             </p>
           </div>
 
@@ -141,7 +149,7 @@ export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
             </Row>
             {side === "BUY" && quote && (
               <Row label="Cash after">
-                <span className="tabular">{formatCents(cash - totalCents)}</span>
+                {portfolioReady ? <span className="tabular">{formatCents(cash - totalCents)}</span> : <Skeleton className="h-4 w-20" />}
               </Row>
             )}
           </dl>
