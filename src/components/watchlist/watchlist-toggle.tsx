@@ -4,10 +4,10 @@ import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useToggleWatchlist, useWatchlist } from "@/hooks/use-market";
-import type { Symbol } from "@/lib/trading/constants";
+import type { StockSymbol } from "@/lib/trading/constants";
 import { cn } from "@/lib/utils";
 
-export function WatchlistToggle({ symbol, size = "icon" }: { symbol: Symbol; size?: "icon" | "default" }) {
+export function WatchlistToggle({ symbol, size = "icon" }: { symbol: StockSymbol; size?: "icon" | "default" }) {
   const { data } = useWatchlist();
   const toggle = useToggleWatchlist();
   const watched = data?.some((w) => w.symbol === symbol) ?? false;

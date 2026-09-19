@@ -12,12 +12,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePlaceOrder, usePortfolio, useQuotes } from "@/hooks/use-market";
 import { formatCents, formatShares } from "@/lib/format";
-import type { Quote } from "@/lib/finnhub/quotes";
-import type { OrderSide, Symbol } from "@/lib/trading/constants";
+import type { Quote } from "@/lib/market/quotes";
+import type { OrderSide, StockSymbol } from "@/lib/trading/constants";
 import { cn } from "@/lib/utils";
 
 interface TradePanelProps {
-  symbol: Symbol;
+  symbol: StockSymbol;
   initialQuote: Quote | null;
 }
 
@@ -28,7 +28,7 @@ export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
   const { data: portfolio } = usePortfolio();
   const { data: quotes } = useQuotes([symbol], {
     pollMs: 10_000,
-    initialData: initialQuote ? ({ [symbol]: initialQuote } as Record<Symbol, Quote | null>) : undefined,
+    initialData: initialQuote ? ({ [symbol]: initialQuote } as Record<StockSymbol, Quote | null>) : undefined,
   });
 
   const quote = quotes?.[symbol] ?? initialQuote;

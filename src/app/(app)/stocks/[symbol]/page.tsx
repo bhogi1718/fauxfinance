@@ -8,7 +8,7 @@ import { WatchlistToggle } from "@/components/watchlist/watchlist-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getQuote, type Quote } from "@/lib/finnhub/quotes";
+import { getQuote, type Quote } from "@/lib/market/quotes";
 import { formatCents } from "@/lib/format";
 import { STOCKS, SUPPORTED_SYMBOLS, isSupportedSymbol } from "@/lib/trading/constants";
 

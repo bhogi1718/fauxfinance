@@ -4,7 +4,7 @@ import { StockCard } from "@/components/stocks/stock-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getSessionUser } from "@/lib/auth/session";
-import { getQuotes } from "@/lib/finnhub/quotes";
+import { getQuotes } from "@/lib/market/quotes";
 import { formatCents } from "@/lib/format";
 import { STARTING_CASH_CENTS, STOCKS, SUPPORTED_SYMBOLS } from "@/lib/trading/constants";
 

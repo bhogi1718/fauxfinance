@@ -10,10 +10,10 @@ export const STOCKS = {
   NVDA: { name: "NVIDIA Corporation", tradingView: "NASDAQ:NVDA", sector: "Semiconductors" },
 } as const;
 
-export type Symbol = keyof typeof STOCKS;
-export const SUPPORTED_SYMBOLS = Object.keys(STOCKS) as Symbol[];
+export type StockSymbol = keyof typeof STOCKS;
+export const SUPPORTED_SYMBOLS = Object.keys(STOCKS) as StockSymbol[];
 
-export function isSupportedSymbol(value: string): value is Symbol {
+export function isSupportedSymbol(value: string): value is StockSymbol {
   return value in STOCKS;
 }
 

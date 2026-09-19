@@ -7,7 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useHistory } from "@/hooks/use-market";
 import type { Transaction } from "@/lib/db/schema";
-import { formatCents, formatDateTime, formatSignedCents, trendClass } from "@/lib/format";
+import { DateTime } from "@/components/ui/datetime";
+import { formatCents, formatSignedCents, trendClass } from "@/lib/format";
 
 type HistoryData = { items: Transaction[]; nextCursor: string | null };
 
@@ -54,7 +55,9 @@ export function HistoryTable({ initialData }: { initialData?: HistoryData }) {
         <TableBody>
           {data.items.map((t) => (
             <TableRow key={t.id}>
-              <TableCell className="whitespace-nowrap text-muted-foreground">{formatDateTime(t.createdAt)}</TableCell>
+              <TableCell className="whitespace-nowrap text-muted-foreground">
+                <DateTime value={t.createdAt} />
+              </TableCell>
               <TableCell>
                 <Badge variant="outline" className={t.side === "BUY" ? "border-gain/40 text-gain" : "border-loss/40 text-loss"}>
                   {t.side}

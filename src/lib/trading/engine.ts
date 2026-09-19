@@ -1,10 +1,10 @@
 import "server-only";
-import { and, eq, sql } from "drizzle-orm";
-import { db } from "@/lib/db";
+import { and, eq } from "drizzle-orm";
+import { db, type Tx } from "@/lib/db";
 import { holdings, transactions, wallets, type Transaction } from "@/lib/db/schema";
-import { getQuote } from "@/lib/finnhub/quotes";
-import { FinnhubError } from "@/lib/finnhub/client";
-import { STARTING_CASH_CENTS, type OrderSide, type Symbol } from "./constants";
+import { getQuote } from "@/lib/market/quotes";
+import { MarketDataError } from "@/lib/market/types";
+import { STARTING_CASH_CENTS, type OrderSide, type StockSymbol } from "./constants";
 import { InsufficientFundsError, InsufficientSharesError, QuoteUnavailableError } from "./errors";
 import {
   canAfford,
@@ -16,7 +16,7 @@ import {
 
 export interface PlaceOrderInput {
   userId: string;
-  symbol: Symbol;
+  symbol: StockSymbol;
   side: OrderSide;
   quantity: number;
 }
@@ -24,12 +24,12 @@ export interface PlaceOrderInput {
 export interface PlaceOrderResult {
   transaction: Transaction;
   balanceCents: number;
-  holding: { symbol: Symbol; quantity: number; avgCostCents: number } | null;
+  holding: { symbol: StockSymbol; quantity: number; avgCostCents: number } | null;
 }
 
 export async function placeOrder(input: PlaceOrderInput): Promise<PlaceOrderResult> {
   const quote = await getQuote(input.symbol).catch((err: unknown) => {
-    if (err instanceof FinnhubError) throw new QuoteUnavailableError(input.symbol);
+    if (err instanceof MarketDataError) throw new QuoteUnavailableError(input.symbol);
     throw err;
   });
 
@@ -103,6 +103,10 @@ async function executeSell(
   const proceedsCents = computeOrderTotalCents(quantity, priceCents);
 
   return db.transaction(async (tx) => {
+    // Always lock wallet before holding (same order as executeBuy) so concurrent
+    // buy/sell requests for one user serialize instead of deadlocking.
+    const wallet = await lockWallet(tx, userId);
+
     const [existing] = await tx
       .select()
       .from(holdings)
@@ -124,7 +128,6 @@ async function executeSell(
       await tx.update(holdings).set({ quantity: remainingQty }).where(eq(holdings.id, existing.id));
     }
 
-    const wallet = await lockWallet(tx, userId);
     const newBalance = wallet.balanceCents + proceedsCents;
     await tx.update(wallets).set({ balanceCents: newBalance }).where(eq(wallets.id, wallet.id));
 
@@ -153,8 +156,6 @@ async function executeSell(
   });
 }
 
-type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
-
 // Locks the user's wallet row for the duration of the transaction, creating it if the
 // signup hook somehow didn't (defensive: a user must never be left without a wallet).
 async function lockWallet(tx: Tx, userId: string) {
@@ -179,5 +180,3 @@ export async function ensureWallet(userId: string) {
     .values({ userId, balanceCents: STARTING_CASH_CENTS })
     .onConflictDoNothing({ target: wallets.userId });
 }
-
-export const realizedPnlSql = sql<number>`coalesce(sum(${transactions.realizedPnlCents}), 0)::bigint`;

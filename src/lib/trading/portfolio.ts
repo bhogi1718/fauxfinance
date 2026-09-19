@@ -2,8 +2,8 @@ import "server-only";
 import { and, desc, eq, lt, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { holdings, transactions, user, wallets, watchlistItems } from "@/lib/db/schema";
-import { getQuotes, type Quote } from "@/lib/finnhub/quotes";
-import { STARTING_CASH_CENTS, SUPPORTED_SYMBOLS, type Symbol, isSupportedSymbol } from "./constants";
+import { getQuotes, type Quote } from "@/lib/market/quotes";
+import { STARTING_CASH_CENTS, SUPPORTED_SYMBOLS, type StockSymbol, isSupportedSymbol } from "./constants";
 import { ensureWallet } from "./engine";
 import {
   computeHoldingsValueCents,
@@ -13,7 +13,7 @@ import {
 } from "./math";
 
 export interface HoldingView {
-  symbol: Symbol;
+  symbol: StockSymbol;
   name: string;
   quantity: number;
   avgCostCents: number;
@@ -52,11 +52,11 @@ export async function getPortfolio(userId: string): Promise<PortfolioView> {
   ]);
 
   const symbols = rows.map((r) => r.symbol).filter(isSupportedSymbol);
-  const quotes = symbols.length ? await getQuotes(symbols) : ({} as Record<Symbol, Quote | null>);
+  const quotes = symbols.length ? await getQuotes(symbols) : ({} as Record<StockSymbol, Quote | null>);
 
   let quotesStale = false;
   const views: HoldingView[] = rows.map((row) => {
-    const symbol = row.symbol as Symbol;
+    const symbol = row.symbol as StockSymbol;
     const quote = quotes[symbol] ?? null;
     if (!quote) quotesStale = true;
     const investedCents = row.quantity * row.avgCostCents;
@@ -127,16 +127,16 @@ export async function getWatchlist(userId: string) {
     .orderBy(desc(watchlistItems.createdAt));
 
   const symbols = rows.map((r) => r.symbol).filter(isSupportedSymbol);
-  const quotes = symbols.length ? await getQuotes(symbols) : ({} as Record<Symbol, Quote | null>);
+  const quotes = symbols.length ? await getQuotes(symbols) : ({} as Record<StockSymbol, Quote | null>);
 
   return rows.map((row) => ({
-    symbol: row.symbol as Symbol,
+    symbol: row.symbol as StockSymbol,
     addedAt: row.createdAt,
-    quote: quotes[row.symbol as Symbol] ?? null,
+    quote: quotes[row.symbol as StockSymbol] ?? null,
   }));
 }
 
-export async function getWatchlistSymbols(userId: string): Promise<Symbol[]> {
+export async function getWatchlistSymbols(userId: string): Promise<StockSymbol[]> {
   const rows = await db
     .select({ symbol: watchlistItems.symbol })
     .from(watchlistItems)

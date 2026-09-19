@@ -1,5 +1,5 @@
 import { handleError, notFound, ok } from "@/lib/api/response";
-import { getQuote } from "@/lib/finnhub/quotes";
+import { getQuote } from "@/lib/market/quotes";
 import { STOCKS, isSupportedSymbol } from "@/lib/trading/constants";
 
 export const dynamic = "force-dynamic";

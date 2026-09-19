@@ -2,12 +2,12 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCents } from "@/lib/format";
-import type { Quote } from "@/lib/finnhub/quotes";
-import type { Symbol } from "@/lib/trading/constants";
+import type { Quote } from "@/lib/market/quotes";
+import type { StockSymbol } from "@/lib/trading/constants";
 import { PriceChange } from "./price-change";
 
 interface StockCardProps {
-  symbol: Symbol;
+  symbol: StockSymbol;
   name: string;
   sector?: string;
   quote: Quote | null;
@@ -37,10 +37,7 @@ export function StockCard({ symbol, name, sector, quote, aside }: StockCardProps
             <PriceChange changePercent={quote.changePercent} className="text-xs" />
           </>
         ) : (
-          <div className="space-y-1.5">
-            <Skeleton className="ml-auto h-4 w-16" />
-            <Skeleton className="ml-auto h-3 w-12" />
-          </div>
+          <p className="text-xs text-muted-foreground">Price unavailable</p>
         )}
       </div>
       {aside && <div className="relative z-10">{aside}</div>}

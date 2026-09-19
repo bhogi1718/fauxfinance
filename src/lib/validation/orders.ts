@@ -21,5 +21,5 @@ export type PlaceOrderInput = z.infer<typeof placeOrderSchema>;
 
 export const orderHistoryQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(50),
-  cursor: z.string().datetime().optional(),
+  cursor: z.iso.datetime().optional(),
 });

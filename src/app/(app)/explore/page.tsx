@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { StockList } from "@/components/stocks/stock-list";
 import type { StockListing } from "@/hooks/use-market";
-import { getQuotes } from "@/lib/finnhub/quotes";
+import { getQuotes } from "@/lib/market/quotes";
 import { STOCKS, SUPPORTED_SYMBOLS } from "@/lib/trading/constants";
 
 export const metadata: Metadata = { title: "Explore" };
