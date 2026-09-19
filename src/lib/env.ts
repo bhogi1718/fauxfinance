@@ -15,6 +15,11 @@ const schema = z.object({
   FINNHUB_API_KEY: optionalSecret,
   MARKET_DATA_PROVIDER: z.enum(["auto", "finnhub", "mock"]).default("auto"),
   QUOTE_CACHE_TTL_MS: z.coerce.number().int().positive().default(15_000),
+  // Defaults to on in production. E2E runs against a production build and turns it off.
+  AUTH_RATE_LIMIT: z
+    .enum(["true", "false"])
+    .optional()
+    .transform((v) => (v === undefined ? process.env.NODE_ENV === "production" : v === "true")),
 });
 
 export type Env = z.infer<typeof schema>;

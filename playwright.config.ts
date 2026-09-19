@@ -29,6 +29,7 @@ export default defineConfig({
         timeout: 240_000,
         env: {
           MARKET_DATA_PROVIDER: "mock",
+          AUTH_RATE_LIMIT: "false",
           BETTER_AUTH_URL: baseURL,
           NEXT_PUBLIC_APP_URL: baseURL,
         },
