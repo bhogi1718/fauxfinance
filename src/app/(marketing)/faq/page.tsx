@@ -45,8 +45,8 @@ const FAQS: { q: string; a: string }[] = [
     a: "By total portfolio value: your cash plus the market value of everything you hold, using the latest prices.",
   },
   {
-    q: "Can I reset my account or get more cash?",
-    a: "Not yet. The starting balance is the same for everyone so the leaderboard stays fair.",
+    q: "Can I reset my account?",
+    a: "Yes. Settings → Reset portfolio wipes your positions and history and restores the starting balance. Everyone starts with the same amount so the leaderboard stays fair.",
   },
 ];
 

@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HistoryPage() {
   const user = await requireUser("/history");
-  const history = await getTransactionHistory(user.id, 100);
+  const history = await getTransactionHistory(user.id, 50);
 
   return (
     <div className="space-y-6">

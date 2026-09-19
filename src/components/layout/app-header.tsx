@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Compass, History, LayoutDashboard, LogOut, Menu, PieChart, Star, Trophy, Wallet } from "lucide-react";
+import { Compass, History, LayoutDashboard, LogOut, Menu, PieChart, Settings, Star, Trophy, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/brand/logo";
+import { StockSearch } from "@/components/stocks/stock-search";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -99,6 +100,7 @@ export function AppHeader({ user }: AppHeaderProps) {
         </nav>
 
         <div className="ml-auto flex items-center gap-3">
+          <StockSearch />
           <div className="hidden items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1.5 text-sm sm:flex">
             <Wallet className="size-4 text-brand" aria-hidden />
             {portfolio ? (
@@ -120,6 +122,10 @@ export function AppHeader({ user }: AppHeaderProps) {
                 <p className="truncate text-xs text-muted-foreground">{user.email}</p>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push("/settings")}>
+                <Settings className="size-4" />
+                Settings
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="size-4" />
                 Sign out

@@ -3,6 +3,16 @@
 import { useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,6 +34,7 @@ interface TradePanelProps {
 export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
   const [side, setSide] = useState<OrderSide>("BUY");
   const [qtyInput, setQtyInput] = useState("1");
+  const [confirming, setConfirming] = useState(false);
   const placeOrder = usePlaceOrder();
   const { data: portfolio } = usePortfolio();
   const { data: quotes } = useQuotes([symbol], {
@@ -56,6 +67,10 @@ export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (validation) return;
+    setConfirming(true);
+  }
+
+  function confirm() {
     placeOrder.mutate(
       { symbol, side, quantity },
       {
@@ -67,6 +82,7 @@ export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
           setQtyInput("1");
         },
         onError: (err) => toast.error(err.message),
+        onSettled: () => setConfirming(false),
       },
     );
   }
@@ -151,6 +167,33 @@ export function TradePanel({ symbol, initialQuote }: TradePanelProps) {
           <p className="text-center text-xs text-muted-foreground">Market order · executes instantly at the current price</p>
         </form>
       </CardContent>
+
+      <AlertDialog open={confirming} onOpenChange={setConfirming}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Confirm {side === "BUY" ? "purchase" : "sale"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {side === "BUY" ? "Buy" : "Sell"} {formatShares(quantity)} of {symbol} at about{" "}
+              <span className="tabular font-medium text-foreground">{formatCents(quote?.priceCents)}</span> each, for an
+              estimated <span className="tabular font-medium text-foreground">{formatCents(totalCents)}</span>. The order fills at
+              the live price the moment you confirm.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={placeOrder.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirm}
+              disabled={placeOrder.isPending}
+              className={side === "BUY" ? "bg-gain text-background hover:bg-gain/85" : "bg-loss text-background hover:bg-loss/85"}
+            >
+              {placeOrder.isPending && <Loader2 className="animate-spin" aria-hidden />}
+              Confirm {side === "BUY" ? "buy" : "sell"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }

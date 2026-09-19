@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api/client";
 import type { Quote } from "@/lib/market/quotes";
 import type { PlaceOrderResult } from "@/lib/trading/engine";
@@ -64,11 +64,16 @@ export function useWatchlist(initialData?: WatchlistEntry[]) {
   });
 }
 
-export function useHistory(initialData?: { items: Transaction[]; nextCursor: string | null }) {
-  return useQuery({
+export type HistoryPage = { items: Transaction[]; nextCursor: string | null };
+
+export function useHistory(initialPage?: HistoryPage) {
+  return useInfiniteQuery({
     queryKey: keys.history,
-    queryFn: () => api<{ items: Transaction[]; nextCursor: string | null }>("/api/orders?limit=100"),
-    initialData,
+    queryFn: ({ pageParam }) =>
+      api<HistoryPage>(`/api/orders?limit=50${pageParam ? `&cursor=${encodeURIComponent(pageParam)}` : ""}`),
+    initialPageParam: null as string | null,
+    getNextPageParam: (last) => last.nextCursor,
+    initialData: initialPage ? { pages: [initialPage], pageParams: [null] } : undefined,
   });
 }
 
