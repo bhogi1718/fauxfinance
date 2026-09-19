@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DATABASE_URL: postgresql://fauxfinance:fauxfinance_dev@localhost:5432/fauxfinance
+  BETTER_AUTH_SECRET: ci-only-secret-ci-only-secret-ci-only-secret
+  BETTER_AUTH_URL: http://localhost:3100
+  NEXT_PUBLIC_APP_URL: http://localhost:3100
+  MARKET_DATA_PROVIDER: mock
+
+jobs:
+  checks:
+    name: Lint, types, unit & integration tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: fauxfinance
+          POSTGRES_PASSWORD: fauxfinance_dev
+          POSTGRES_DB: fauxfinance
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U fauxfinance"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+
+  e2e:
+    name: End-to-end (Playwright)
+    runs-on: ubuntu-latest
+    needs: checks
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: fauxfinance
+          POSTGRES_PASSWORD: fauxfinance_dev
+          POSTGRES_DB: fauxfinance
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U fauxfinance"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run db:migrate
+      - run: npm run e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
