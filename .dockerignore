@@ -9,5 +9,4 @@ playwright-report
 e2e
 tests
 *.md
-.claude
 .github
